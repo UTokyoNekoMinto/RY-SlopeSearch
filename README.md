@@ -24,7 +24,7 @@ make
 *ignore `warning: use of ‘std::hardware_destructive_interference_size’`*
 
 ### Docker Usage (Recommended for Reviewers)
-To ensure easy reproducibility and avoid environment setup issues, we provide a Docker container with all dependencies pre-installed.This is the recommended way for reviewers to run RY-SlopeSearch.
+To ensure easy reproducibility and avoid environment setup issues, we provide a Docker container with all dependencies pre-installed.This is the recommended way for reviewers to run RY-SlopeSearch. You don't need to clone the repo.
 
 #### Step 1: Pull the Docker image
 ```bash
