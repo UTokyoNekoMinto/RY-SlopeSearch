@@ -23,7 +23,46 @@ make
 
 *ignore `warning: use of ‘std::hardware_destructive_interference_size’`*
 
-### How to run an example
+### Docker Usage (Recommended for Reviewers)
+To ensure easy reproducibility and avoid environment setup issues, we provide a Docker container with all dependencies pre-installed.This is the recommended way for reviewers to run RY-SlopeSearch.
+
+#### Step 1: Pull the Docker image
+```bash
+docker pull ghcr.io/utokyochenye/ry-slopesearch:latest
+```
+
+#### Step 2: Run the built-in example dataset
+The example dataset example_data/assembled-ecoli is included inside the image.
+```bash
+mkdir -p out
+docker run --rm \
+  -v "(your output directory)":/out \
+  ghcr.io/utokyochenye/ry-slopesearch:latest \
+  --config /opt/RY-SlopeSearch/example/example_config.container.yaml
+```
+
+#### Step 3: Changing the sampling method
+To test a different word set (e.g. start_ry_16_matches):
+- copy example_config.container.yaml in your host machine, name it as my_config.yaml
+- edit my_config.yaml, choose your parameters:
+  - like sampling_method: "start_ry_16_matches"
+  - you can only change:
+    - `parameters`
+    - `sampling_method`
+    - `use_progress_bar`
+  - DON'T change other setting
+  - as for the meaning of the config setting, you can check `How to run an example (Native)`
+
+```bash
+docker run --rm \
+  -v "(your output directory)":/out \
+  -v "(your my_config.yaml path)":/cfg.yaml \
+  ghcr.io/utokyochenye/ry-slopesearch:latest \
+  --config /cfg.yaml
+```
+- fill in `(your output directory)` and `(your my_config.yaml path)`
+
+### How to run an example (Native)
 #### Example location
 - Example Folder: `RY-SlopeSearch/example`
 - Example Data: `RY-SlopeSearch/example/example_data/assembled-ecoli`

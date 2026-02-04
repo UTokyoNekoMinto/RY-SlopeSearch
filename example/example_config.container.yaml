@@ -1,6 +1,5 @@
 dataset:
-  # datasets_directory: "/big/chenye/code/RY-SlopeSearch/example/example_data/assembled-ecoli"
-  datasets_directory: "/home/chenye/workspace/RY-SlopeSearch/example/example_data/assembled-ecoli"
+  datasets_directory: "/opt/RY-SlopeSearch/example/example_data/assembled-ecoli"
 
 parameters:
   using_one_to_one_matching: true
@@ -18,7 +17,6 @@ parameters:
 #   start_ry_128_matches
 sampling_method: "start_ry_128_matches"
 
-# output_directory: "/big/chenye/code/RY-SlopeSearch/example/example_output"
-output_directory: "/home/chenye/data/result/RY-SlopeSearch"
+output_directory: "/out"
 
 use_progress_bar: true
