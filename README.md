@@ -1,6 +1,6 @@
 # RY-SlopeSearch
 ## Introduction
-Here is the offical source code of RY-SlopeSearch, which is an slope-based alignment-free algorithms for fast DNA seqs comparision.
+Here is the source code of RY-SlopeSearch, which is an slope-based alignment-free algorithms for fast DNA seqs comparision.
 
 ## Docker Usage (Recommended for Reviewers)
 To ensure easy reproducibility and avoid environment setup issues, we provide a Docker container with all dependencies pre-installed.This is the recommended way for reviewers to run RY-SlopeSearch. You don't need to clone the repo.
