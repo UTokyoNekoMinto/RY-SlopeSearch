@@ -29,27 +29,13 @@ denote the average length of the two sequences, and let $\ell$ denote the patter
 We define
 
 $$
-k_{\min}
-=
-\max\left(
-\left\lceil
-\frac{\log(L_{\mathrm{avg}}) + 0.69}{0.875}
-\right\rceil,
-\ell
-\right)
+k_{\min}=\max\left(\left\lceil\frac{\log(L_{\mathrm{avg}}) + 0.69}{0.875}\right\rceil,\ell\right)
 $$
 
 and
 
 $$
-k_{\max}
-=
-\max\left(
-\left\lfloor
-\frac{\log(L_{\mathrm{avg}})}{0.634}
-\right\rfloor,
-\ell
-\right).
+k_{\max}=\max\left(\left\lfloor\frac{\log(L_{\mathrm{avg}})}{0.634}\right\rfloor,\ell\right).
 $$
 
 These constants are taken from the Slope-SpaM paper. The slope is then fitted using all integer values
