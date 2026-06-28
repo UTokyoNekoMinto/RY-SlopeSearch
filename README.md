@@ -2,7 +2,7 @@
 ## Introduction
 Here is the source code of RY-SlopeSearch, which is an slope-based alignment-free algorithms for fast DNA seqs comparision.
 
-## Getting Start (Native)
+## Getting Start
 ### Requirements
 - GCC 12.3.0 or higher
 - CMake: Version 3.20 or higher
