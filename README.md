@@ -13,8 +13,8 @@ Here is the source code of RY-SlopeSearch, which is an slope-based alignment-fre
   - OpenMP: Optional, but if enabled, it requires a compatible OpenMP installation for parallel processing support
 
 ### Installation
+After downloading the code, run following code:
 ```shell
-git clone --recursive git@github.com:UTokyoChenYe/RY-SlopeSearch.git
 cd RY-SlopeSearch
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/bin/gcc-12 -DCMAKE_CXX_COMPILER=/usr/bin/g++-12 ..
