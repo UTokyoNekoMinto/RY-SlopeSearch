@@ -10,9 +10,9 @@ We used two sequences, *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89
 
 ![Relationship between F(k) and word length k](./doc/f_k.png)
 
-**Figure:** Relationship between $F(k)$ and word length $k$ for $k \in [2, 24]$, computed for *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89. The curve was generated using all $k$-mers and many-to-many matching.
+**Figure:** Relationship between $F(k)$ and word length $k$ for $k \in [2, 24]$, computed for *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89. The curve was generated using all $k$ -mers and many-to-many matching.
 
-### Empirical Determination of the $k$-Range for Slope Estimation
+### Empirical Determination of the $k$ -Range for Slope Estimation
 
 The slope of $F(k)$ is estimated over a restricted interval of $k$ values. Selecting an appropriate range is important: for small $k$, background matches dominate and introduce noise, whereas for large $k$, the number of observed matches becomes sparse.
 
@@ -24,7 +24,7 @@ $$
 L_{\mathrm{avg}} = \frac{L_1 + L_2}{2}
 $$
 
-denote the average length of the two sequences, and let $\ell$ denote the pattern length. For full $k$-mers, $\ell = 1$.
+denote the average length of the two sequences, and let $\ell$ denote the pattern length. For full $k$ -mers, $\ell = 1$ .
 
 We define
 
