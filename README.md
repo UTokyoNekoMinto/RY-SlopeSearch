@@ -2,6 +2,62 @@
 ## Introduction
 Here is the source code of RY-SlopeSearch, which is an slope-based alignment-free algorithms for fast DNA seqs comparision.
 
+All ranking results of RY-SlopeSearch are publicly available on the AFproject website. You can find them by searching for the keyword `RY-SlopeSearch-v1.0.0` on the AFproject website.
+
+### $F(k)$ Curve for Word Lengths $k$
+
+We used two sequences, *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89, to generate the $F(k)$ curve for word lengths $k$. This curve provides a visualization of $F(k)$ and helps illustrate the slope-based method.
+
+![Relationship between F(k) and word length k](./doc/f_k.png)
+
+**Figure:** Relationship between $F(k)$ and word length $k$ for $k \in [2, 24]$, computed for *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89. The curve was generated using all $k$-mers and many-to-many matching.
+
+### Empirical Determination of the $k$-Range for Slope Estimation
+
+The slope of $F(k)$ is estimated over a restricted interval of $k$ values. Selecting an appropriate range is important: for small $k$, background matches dominate and introduce noise, whereas for large $k$, the number of observed matches becomes sparse.
+
+In our implementation, the interval is determined by an empirical formula based on the average sequence length, following Slope-SpaM.
+
+Let
+
+$$
+L_{\mathrm{avg}} = \frac{L_1 + L_2}{2}
+$$
+
+denote the average length of the two sequences, and let $\ell$ denote the pattern length. For full $k$-mers, $\ell = 1$.
+
+We define
+
+$$
+k_{\min}
+=
+\max\left(
+\left\lceil
+\frac{\log(L_{\mathrm{avg}}) + 0.69}{0.875}
+\right\rceil,
+\ell
+\right)
+$$
+
+and
+
+$$
+k_{\max}
+=
+\max\left(
+\left\lfloor
+\frac{\log(L_{\mathrm{avg}})}{0.634}
+\right\rfloor,
+\ell
+\right).
+$$
+
+These constants are taken from the Slope-SpaM paper. The slope is then fitted using all integer values
+
+$$
+k \in [k_{\min}, k_{\max}].
+$$
+
 ## Getting Start
 ### Requirements
 - GCC 12.3.0 or higher
