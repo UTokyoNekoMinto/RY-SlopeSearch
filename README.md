@@ -110,12 +110,12 @@ You can upload your `.phy` file of fish_mito genomes (example data) to [AFProjec
 
 ## Core Model
 ### Slope-based Sequence Algorithm
-Slope-based methods estimate sequence similarity by analyzing how the number of shared $k$-mers changes as the $k$-mer length $k$ increases.
+Slope-based methods estimate sequence similarity by analyzing how the number of shared $k$ -mers changes as the $k$ -mer length $k$ increases.
 
 The key observation is that, within homologous regions, the number of shared $k$-mers decays approximately exponentially as $k$ increases. Therefore, the slope of the log-transformed match count is directly related to sequence similarity.
 
 Let:
-- $N_k$ be the observed number of $k$-mer matches, including both homologous matches and background matches;
+- $N_k$ be the observed number of $k$ -mer matches, including both homologous matches and background matches;
 - $E(B_k)$ be the expected number of background matches;
 - $p$ be the per-site match probability;
 - $L_h$ be the effective length of homologous regions.
