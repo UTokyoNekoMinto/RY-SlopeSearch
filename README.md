@@ -4,7 +4,7 @@ Here is the source code of RY-SlopeSearch, which is an slope-based alignment-fre
 
 All ranking results of RY-SlopeSearch are publicly available on the AFproject website. You can find them by searching for the keyword `RY-SlopeSearch-v1.0.0` on the AFproject website.
 
-If you want to see the introduction of slope-based model(including mathematical principles). Please check section [Core Model](#core-model).
+If you want to see the introduction of slope-based model(including mathematical principles). Please check the section "Core Model" in this README.md, which is next to the section "Getting Start".
 
 ## Getting Start
 ### Requirements
