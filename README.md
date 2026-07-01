@@ -4,45 +4,7 @@ Here is the source code of RY-SlopeSearch, which is an slope-based alignment-fre
 
 All ranking results of RY-SlopeSearch are publicly available on the AFproject website. You can find them by searching for the keyword `RY-SlopeSearch-v1.0.0` on the AFproject website.
 
-### $F(k)$ Curve for Word Lengths $k$
-
-We used two sequences, *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89, to generate the $F(k)$ curve for word lengths $k$. This curve provides a visualization of $F(k)$ and helps illustrate the slope-based method.
-
-![Relationship between F(k) and word length k](./doc/f_k.png)
-
-**Figure:** Relationship between $F(k)$ and word length $k$ for $k \in [2, 24]$, computed for *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89. The curve was generated using all $k$ -mers and many-to-many matching.
-
-### Empirical Determination of the $k$ -Range for Slope Estimation
-
-The slope of $F(k)$ is estimated over a restricted interval of $k$ values. Selecting an appropriate range is important: for small $k$, background matches dominate and introduce noise, whereas for large $k$, the number of observed matches becomes sparse.
-
-In our implementation, the interval is determined by an empirical formula based on the average sequence length, following Slope-SpaM.
-
-Let
-
-$$
-L_{\mathrm{avg}} = \frac{L_1 + L_2}{2}
-$$
-
-denote the average length of the two sequences, and let $\ell$ denote the pattern length. For full $k$ -mers, $\ell = 1$ .
-
-We define
-
-$$
-k_{\min}=\max\left(\left\lceil\frac{\log(L_{\mathrm{avg}}) + 0.69}{0.875}\right\rceil,\ell\right)
-$$
-
-and
-
-$$
-k_{\max}=\max\left(\left\lfloor\frac{\log(L_{\mathrm{avg}})}{0.634}\right\rfloor,\ell\right).
-$$
-
-These constants are taken from the Slope-SpaM paper. The slope is then fitted using all integer values
-
-$$
-k \in [k_{\min}, k_{\max}].
-$$
+If you want to see the introduction of slope-based model(including mathematical principles). Please check section [Core Model](#core-model).
 
 ## Getting Start
 ### Requirements
@@ -144,6 +106,100 @@ All results are in `output_directory`
 
 #### Step 5: Upload `.phy` file to AFProject website
 You can upload your `.phy` file of fish_mito genomes (example data) to [AFProject-benchmark-fish_mito](https://afproject.org/app/benchmark/genome/std/assembled/fish_mito/) to check nRF/nQD and your ranking.
+
+
+## Core Model
+### Slope-based Sequence Algorithm
+Slope-based methods estimate sequence similarity by analyzing how the number of shared $k$-mers changes as the $k$-mer length $k$ increases.
+
+The key observation is that, within homologous regions, the number of shared $k$-mers decays approximately exponentially as $k$ increases. Therefore, the slope of the log-transformed match count is directly related to sequence similarity.
+
+Let:
+- $N_k$ be the observed number of $k$-mer matches, including both homologous matches and background matches;
+- $E(B_k)$ be the expected number of background matches;
+- $p$ be the per-site match probability;
+- $L_h$ be the effective length of homologous regions.
+
+When $L_h \gg k$, the homologous component of the match count can be approximated by $L_h p^k$. Therefore, the expected number of observed matches can be written as:
+
+$$
+E(N_k) \approx L_h p^k + E(B_k)
+$$
+
+After subtracting the expected background matches, we define:
+
+$$
+F(k) := \log(E(N_k)-E(B_k))
+$$
+
+Then:
+
+$$
+F(k) \approx \log(L_h) + k\log(p)
+$$
+
+This means that $F(k)$ is approximately linear in $k$, and its slope is:
+
+$$
+\text{slope} = \log(p)
+$$
+
+Thus, the sequence similarity can be estimated as:
+
+$$
+p = e^{\text{slope}}
+$$
+
+In practice, the range of $k$ values used for slope estimation is determined by empirical formulas.
+
+For phylogenetic reconstruction, the estimated similarity $p$ can be converted into an evolutionary distance using a nucleotide substitution model such as Jukes-Cantor (JC69):
+
+$$
+d = -\frac{3}{4}\log\left(1-\frac{4}{3}(1-p)\right)
+$$
+
+The resulting distance can then be used to construct a phylogenetic tree.
+
+### Empirical Determination of the $k$ -Range for Slope Estimation
+
+The slope of $F(k)$ is estimated over a restricted interval of $k$ values. Selecting an appropriate range is important: for small $k$, background matches dominate and introduce noise, whereas for large $k$, the number of observed matches becomes sparse.
+
+In our implementation, the interval is determined by an empirical formula based on the average sequence length, following Slope-SpaM.
+
+Let
+
+$$
+L_{\mathrm{avg}} = \frac{L_1 + L_2}{2}
+$$
+
+denote the average length of the two sequences, and let $\ell$ denote the pattern length. For full $k$ -mers, $\ell = 1$ .
+
+We define
+
+$$
+k_{\min}=\max\left(\left\lceil\frac{\log(L_{\mathrm{avg}}) + 0.69}{0.875}\right\rceil,\ell\right)
+$$
+
+and
+
+$$
+k_{\max}=\max\left(\left\lfloor\frac{\log(L_{\mathrm{avg}})}{0.634}\right\rfloor,\ell\right).
+$$
+
+These constants are taken from the Slope-SpaM paper. The slope is then fitted using all integer values
+
+$$
+k \in [k_{\min}, k_{\max}].
+$$
+
+### $F(k)$ Curve for Word Lengths $k$
+
+We used two sequences, *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89, to generate the $F(k)$ curve for word lengths $k$. This curve provides a visualization of $F(k)$ and helps illustrate the slope-based method.
+
+![Relationship between F(k) and word length k](./doc/f_k.png)
+
+**Figure:** Relationship between $F(k)$ and word length $k$ for $k \in [2, 24]$, computed for *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89. The curve was generated using all $k$ -mers and many-to-many matching.
+
 
 ## Contact
 If you have any questiones, please feel free to leave a message to me!
