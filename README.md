@@ -98,7 +98,7 @@ The parameters of configs
 
 #### Step 3: Run Program
 - Enter into build folder: `cd ./build`
-- Run the program: `./RY-SlopeSearch --config (RY-SlopeSearch project root)/configs/example_config.yaml`
+- Run the program: `./RY-SlopeSearch --config (RY-SlopeSearch project root)/example/example_config.yaml`
   - `--config`: the location of your config
 
 #### Step 4: Check the result
