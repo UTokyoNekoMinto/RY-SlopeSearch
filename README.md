@@ -1,4 +1,6 @@
 # RY-SlopeSearch
+[![DOI](https://zenodo.org/badge/1073472769.svg)](https://doi.org/10.5281/zenodo.23006283)
+
 ## Introduction
 Here is the source code of RY-SlopeSearch, which is a slope-based alignment-free algorithm for fast DNA sequence comparison.
 
@@ -174,6 +176,17 @@ We used two sequences, *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89
 
 **Figure:** Relationship between $F(k)$ and word length $k$ for $k \in [2, 24]$, computed for *Shigella dysenteriae* Sd197 and *Escherichia coli* UTI89. The curve was generated using all $k$ -mers and many-to-many matching.
 
+
+## Code Availability
+The source code is archived on Zenodo:
+- All versions (resolves to the latest release): [10.5281/zenodo.23006283](https://doi.org/10.5281/zenodo.23006283)
+- v1.1.0: [10.5281/zenodo.23006284](https://doi.org/10.5281/zenodo.23006284)
+
+The Zenodo archive does not include the SeqAn3 submodule. When building from the archive, fetch it into `third_party/seqan3` first:
+```shell
+git clone https://github.com/seqan/seqan3.git third_party/seqan3
+git -C third_party/seqan3 checkout dccd52fd072eb7073ddc7990550e0f5fc97ecdea
+```
 
 ## Contact
 If you have any questions, please feel free to leave a message to me!
