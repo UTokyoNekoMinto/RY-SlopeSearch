@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(RY-SlopeSearch VERSION 1.0.0)
+project(RY-SlopeSearch VERSION 1.1.0)
 
 # === set C++ standard ===
 set(CMAKE_CXX_STANDARD 20)

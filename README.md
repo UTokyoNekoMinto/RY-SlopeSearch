@@ -2,7 +2,7 @@
 ## Introduction
 Here is the source code of RY-SlopeSearch, which is a slope-based alignment-free algorithm for fast DNA sequence comparison.
 
-All ranking results of RY-SlopeSearch are publicly available on the AFproject website. You can find them by searching for the keyword `RY-SlopeSearch-v1.0.0` on the AFproject website.
+All ranking results of RY-SlopeSearch are publicly available on the AFproject website. You can find them by searching for the keyword `RY-SlopeSearch-v1.0.0` on the AFproject website. Later versions only change the command-line interface and produce identical distance matrices, so these results still apply.
 
 If you want to see the introduction of the slope-based model (including mathematical principles), please check the section "Core Model" in this README.md, which is next to the section "Getting Started".
 
@@ -16,7 +16,7 @@ If you want to see the introduction of the slope-based model (including mathemat
 
 ### Installation
 ```shell
-git clone --recursive git@github.com:UTokyoChenYe/RY-SlopeSearch.git
+git clone --recursive https://github.com/UTokyoNekoMinto/RY-SlopeSearch.git
 cd RY-SlopeSearch
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/bin/gcc-12 -DCMAKE_CXX_COMPILER=/usr/bin/g++-12 ..
