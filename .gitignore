@@ -24,5 +24,8 @@ bin/
 # ignore log files
 *.log
 
+# ignore example outputs
+example/example_output/
+
 # ignore vscode's config files
 .vscode/
