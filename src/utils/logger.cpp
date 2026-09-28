@@ -39,14 +39,3 @@ std::string Logger::timestamp(bool for_path) {
 
     return std::string(buf);
 }
-
-void Logger::log_config_yaml(const std::string& config_yaml) {
-    std::ostringstream oss;
-    oss << "[" << timestamp(false) << "] [CONFIG]" << std::endl;
-    oss << config_yaml << std::endl;
-
-    std::cout << oss.str();
-    if (logfile.is_open()) {
-        logfile << oss.str() << std::endl;
-    }
-}

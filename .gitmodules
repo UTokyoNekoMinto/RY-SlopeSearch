@@ -4,6 +4,3 @@
 [submodule "third_party/seqan3"]
 	path = third_party/seqan3
 	url = https://github.com/seqan/seqan3.git
-[submodule "third_party/yaml-cpp"]
-	path = third_party/yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp.git

@@ -29,9 +29,6 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/range-v3/include)
 # === add SeqAn3 ===
 find_package(seqan3 3.0 REQUIRED)
 
-# === add yaml-cpp ===
-add_subdirectory(third_party/yaml-cpp)
-
 # === optional enable OpenMP ===
 if(USE_OPENMP)
     find_package(OpenMP COMPONENTS CXX)  # only find C++ part, avoid OpenMP_C error
@@ -54,7 +51,10 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 add_executable(RY-SlopeSearch ${SOURCES})
 
 # === link dependencies ===
-target_link_libraries(RY-SlopeSearch PRIVATE yaml-cpp seqan3::seqan3)
+target_link_libraries(RY-SlopeSearch PRIVATE seqan3::seqan3)
+
+# === expose project version to the code ===
+target_compile_definitions(RY-SlopeSearch PRIVATE RY_SLOPESEARCH_VERSION="${PROJECT_VERSION}")
 
 # === link OpenMP (if available) ===
 if(USE_OPENMP AND OpenMP_CXX_FOUND)

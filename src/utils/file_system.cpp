@@ -1,5 +1,4 @@
 #include "utils/file_system.hpp"
-#include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <stdexcept>
 #include <filesystem>

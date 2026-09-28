@@ -21,9 +21,6 @@ public:
     template<typename T>
     void error(const T& msg) { write("ERROR", msg); }
 
-    // log complete configuration file (YAML)
-    void log_config_yaml(const std::string& config_yaml);
-
     // get log directory and filename
     std::string get_log_directory() const { return log_directory; }
     std::string get_log_filename() const { return log_filename; }

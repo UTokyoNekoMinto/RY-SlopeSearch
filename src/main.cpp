@@ -1,5 +1,5 @@
 #include "utils/logger.hpp"
-#include "utils/config.hpp"
+#include "utils/cli.hpp"
 #include "model/F_k_function.hpp"
 #include "model/match_tool.hpp"
 #include "utils/evolution_model.hpp"
@@ -18,31 +18,24 @@
 #include <set>
 #include <iomanip>
 #include <chrono>
-#include <omp.h>
 #include <cmath>
 #include <numeric>
 
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif
+
 int main(int argc, char** argv) {
-    // === set thread number ===
-    omp_set_num_threads(64);  // 将线程数限制为 64
-
     // === parse command line arguments ===
-    std::string config_path;
-    for (int i = 0; i < argc - 1; ++i) {
-        if (std::string(argv[i]) == "--config") {
-            config_path = argv[i + 1];
-        }
-    }
-    if (config_path.empty()) {
-        std::cerr << "Usage: " << argv[0] << " --config path_to_config.yaml\n";
-        return 1;
-    }
+    Options opts = parse_args(argc, argv);
 
-    // === load config ===
-    Config cfg = load_config(config_path);
-    Logger logger(cfg.output_directory);
+#ifdef USE_OPENMP
+    omp_set_num_threads(opts.threads);
+#endif
+    const bool use_parallel = opts.threads > 1;
+
+    Logger logger(opts.output_directory);
     logger.info("Program started");
-    logger.info("Config file loaded from: " + config_path);
     std::string output_dir = logger.get_log_directory();
     logger.info("Output directory: " + output_dir);
     logger.info("Output file: " + logger.get_log_filename());
@@ -55,36 +48,25 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // use set to store unique thread IDs
-    std::set<int> used_thread_ids;
-    #pragma omp parallel
-    {
-        #pragma omp critical
-        used_thread_ids.insert(omp_get_thread_num());
-    }
-
-    // === record YAML config content to log ===
-    std::string config_log_path = output_dir + "/config_used.yaml"; 
-    std::ifstream config_file(config_path);
-    if (config_file) {
-        std::ofstream config_log(config_log_path);  // or use better path control way
-        if (config_log) {
-            config_log << config_file.rdbuf();
-            config_log.close();
-        } else {
-            logger.warn("Failed to open config_used.yaml for writing.");
-        }
+    // === record run parameters ===
+    std::string params_path = output_dir + "/run_parameters.txt";
+    std::ofstream params_out(params_path);
+    if (params_out) {
+        params_out << format_options(opts);
+        params_out.close();
     } else {
-        logger.warn("Failed to open config file: " + config_path);
+        logger.warn("Failed to write run parameters to: " + params_path);
     }
+    logger.info("Sampling method: " + opts.sampling_method);
+    logger.info("Threads: " + std::to_string(opts.threads));
 
     // === load sequences ===
-    logger.info("Loading sequences from directory: " + cfg.datasets_directory);
-    auto [names, sequences] = load_sequences_from_multiple_files(cfg.datasets_directory);
+    logger.info("Loading sequences from directory: " + opts.input_directory);
+    auto [names, sequences] = load_sequences_from_multiple_files(opts.input_directory);
     size_t N = sequences.size();
 
-    if (N == 0) {
-        logger.error("No sequences found in directory: " + cfg.datasets_directory);
+    if (N < 2) {
+        logger.error("At least two sequences are required, found " + std::to_string(N) + " in: " + opts.input_directory);
         return 1;
     }
 
@@ -95,12 +77,12 @@ int main(int argc, char** argv) {
     
     std::vector<std::vector<float>> distance_matrix(N, std::vector<float>(N, 0.0f));
 
-    ProgressBar progress_bar(static_cast<size_t>(N * (N - 1) / 2), "Computing pairwise distances", cfg.use_progress_bar);
+    ProgressBar progress_bar(static_cast<size_t>(N * (N - 1) / 2), "Computing pairwise distances", opts.use_progress_bar);
     progress_bar.start();
     auto start_time = std::chrono::high_resolution_clock::now();  // start timing
 
-    const auto& patterns_vec = get_patterns(cfg.sampling_method);
-    int pattern_length = get_pattern_length(cfg.sampling_method);
+    const auto& patterns_vec = get_patterns(opts.sampling_method);
+    int pattern_length = get_pattern_length(opts.sampling_method);
     std::set<std::string> patterns(patterns_vec.begin(), patterns_vec.end());
 
     // map the DNA k-mer to a number
@@ -135,7 +117,7 @@ int main(int argc, char** argv) {
 
     // store k-mer counts for each sequence
     std::vector< std::vector< std::vector<KmerCount> > > kmerCounts(N);
-    #pragma omp parallel for schedule(dynamic) collapse(1) if(cfg.use_openmp)
+    #pragma omp parallel for schedule(dynamic) collapse(1) if(use_parallel)
     for (size_t i = 0; i < N; ++i) {
         for (size_t j = 0; j < sequences[i].size(); ++j) {
             sequences[i][j] = dna_kmer_to_num[sequences[i][j]];
@@ -172,11 +154,10 @@ int main(int argc, char** argv) {
 
 
 
-    #pragma omp parallel for schedule(dynamic) collapse(1) if(cfg.use_openmp)  // OpenMP control
+    #pragma omp parallel for schedule(dynamic) collapse(1) if(use_parallel)
     for (size_t i = 0; i < N; ++i) {
         for (size_t j = i + 1; j < N; ++j) {  // only compute upper triangle part
-            FKFunction fk(sequences[i], sequences[j], pattern_length, min_k_min, cfg, logger);
-            // double p_hat = fk.calculate_p_hat(kmerCountsMap[i], kmerCountsMap[j]);
+            FKFunction fk(sequences[i], sequences[j], pattern_length, min_k_min, opts, logger);
             double p_hat = fk.calculate_p_hat(kmerCounts[i], kmerCounts[j]);
 
             // === compute evolutionary distance ===
@@ -188,23 +169,6 @@ int main(int argc, char** argv) {
             progress_bar.increment();
         }
     }
-
-    // #pragma omp parallel for schedule(dynamic)
-    // for (size_t index = 0; index < N * (N - 1) / 2; ++index) {
-    //     // 反推 (i, j)
-    //     size_t i = static_cast<size_t>((std::sqrt(8 * index + 1) - 1) / 2);
-    //     size_t j = index - i * (i + 1) / 2 + i + 1;
-
-    //     FKFunction fk(sequences[i], sequences[j], pattern_length, min_k_min, cfg, logger);
-    //     double p_hat = fk.calculate_p_hat(kmerCountsMap[i], kmerCountsMap[j]);
-    //     float distance = estimate_jukes_cantor_distance(static_cast<float>(p_hat), logger);
-
-    //     distance_matrix[i][j] = distance;
-    //     distance_matrix[j][i] = distance;
-
-    //     progress_bar.increment();
-    // }
-
 
     progress_bar.finish();
 

@@ -2,14 +2,14 @@
 #include <string>
 #include <vector>
 #include "utils/logger.hpp"
-#include "utils/config.hpp"
+#include "utils/cli.hpp"
 #include "model/KmerCount.hpp"
 
 #include <unordered_map>
 
 class FKFunction {
 public:
-    FKFunction(const std::string& seq1, const std::string& seq2, int pattern_length, int min_k_min, const Config& cfg, Logger& logger);
+    FKFunction(const std::string& seq1, const std::string& seq2, int pattern_length, int min_k_min, const Options& opts, Logger& logger);
     double calculate_p_hat(const std::vector<std::vector<KmerCount>> &kmer_counts1,const std::vector<std::vector<KmerCount>> &kmer_counts2);
     void compute_fk(const std::vector<std::vector<KmerCount>> &kmer_counts1, const std::vector<std::vector<KmerCount>> &kmer_counts2);
     const std::vector<double>& get_FkLog() const { return Fk_log; }
@@ -24,6 +24,7 @@ private:
     int min_k_min;
     int pattern_length;
     double L_avg;
-    Config cfg;
+    bool use_one_to_one_matching;
+    bool use_background_matches;
     Logger& logger;
 };

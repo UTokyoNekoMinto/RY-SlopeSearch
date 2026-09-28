@@ -24,11 +24,5 @@ bin/
 # ignore log files
 *.log
 
-# ignore yaml-cpp's compile files
-third_party/yaml-cpp/build/
-third_party/yaml-cpp/CMakeFiles/
-third_party/yaml-cpp/CMakeCache.txt
-third_party/yaml-cpp/*.cmake
-
 # ignore vscode's config files
 .vscode/
