@@ -10,9 +10,8 @@ If you want to see the introduction of the slope-based model (including mathemat
 ### Requirements
 - GCC 12.3.0 or higher
 - CMake: Version 3.20 or higher
-- third party (included as git submodules under `third_party/`)
+- third party (included as a git submodule under `third_party/`)
   - SeqAn3 Library: Used for FASTA parsing
-  - range-v3 Library: Needed as a dependency for SeqAn3
 - OpenMP: Optional, but if enabled, it requires a compatible OpenMP installation for parallel processing support
 
 ### Installation

@@ -23,9 +23,6 @@ option(USE_OPENMP "Enable OpenMP parallelization" ON)
 # === add SeqAn3 path ===
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/seqan3/cmake")
 
-# === include range-v3 (SeqAn3's dependency) ===
-include_directories(${CMAKE_SOURCE_DIR}/third_party/range-v3/include)
-
 # === add SeqAn3 ===
 find_package(seqan3 3.0 REQUIRED)
 
